@@ -20,6 +20,7 @@ enum GameState {
   Playing,
   Won,
   Lost,
+  Copied
 }
 
 interface GameProps {
@@ -43,11 +44,12 @@ interface GameProps {
 }
 
 const minLength = 4;
-const defaultLength = 5;
+const defaultLength = Math.floor(Math.random() * 4 + 4);
 const maxLength = 11;
 const limitLength = (n: number) =>
   n >= minLength && n <= maxLength ? n : defaultLength;
-
+const randLength = () =>
+  Math.floor(Math.random() * 4 + 4);
 function getChallengeUrl(target: string): string {
   return (
     window.location.origin +
@@ -87,6 +89,7 @@ function parseUrlGameNumber(): number {
 function Game(props: GameProps) {
   const [gameState, setGameState] = useState(GameState.Playing);
   const [guesses, setGuesses] = useState<string[]>([]);
+  const [starttime, setStarttime] = useState<number>(+new Date());
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [challenge, setChallenge] = useState<string>(initChallenge);
   const [wordLength, setWordLength] = useState(
@@ -132,11 +135,12 @@ function Game(props: GameProps) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
     setChallenge("");
-    const newWordLength = limitLength(wordLength);
+    const newWordLength = randLength();
     setWordLength(newWordLength);
     setTarget(Dictionary.randomTarget(props.wordlist, newWordLength));
     setHint("");
     setGuesses([]);
+    setStarttime(+new Date());
     setCurrentGuess("");
     setGameState(GameState.Playing);
     setGameNumber((x) => x + 1);
@@ -194,7 +198,13 @@ function Game(props: GameProps) {
   const inGame = gameState === GameState.Playing &&
       (guesses.length > 0 || currentGuess !== "" || challenge !== "");
   const onKey = (key: string) => {
-    if (gameState !== GameState.Playing) {
+    if (gameState === GameState.Won || gameState === GameState.Lost) {
+      if (key === "Enter") {
+        setGameState(GameState.Copied);
+      }
+      return;
+    }
+    if (gameState === GameState.Copied) {
       if (key === "Enter") {
         startNextGame();
       }
@@ -247,10 +257,10 @@ function Game(props: GameProps) {
        `/${variants}` : '');
 
   const log = (target: string, correct: boolean) => {
-      const time = +new Date(), dur = time - times[times.length-1].time;
+      const time = +new Date(), dur = time - starttime;
       setTimes(times => [...times, {
         word: target,
-        time: time,
+        time: dur,
         firstKey: firstKey ?? time,
         penalty: guesses.length * props.penalty,
         correct
@@ -393,20 +403,6 @@ function Game(props: GameProps) {
           value={wordLength}
           onChange={(e) => newWithLength((_: number) => Number(e.target.value))}
         ></input>
-        <button
-          style={{ flex: "0 0 auto" }}
-          disabled={gameState !== GameState.Playing || guesses.length === 0}
-          onClick={() => {
-            setHint(
-              `The answer was ${target.toUpperCase()}. (Enter to play again)`
-            );
-            setGameState(GameState.Lost);
-            log(target, false);
-            (document.activeElement as HTMLElement)?.blur();
-          }}
-        >
-          Give up
-        </button>
       </div>
       <div className="Game-main">
         <table

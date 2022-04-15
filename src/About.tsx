@@ -7,6 +7,7 @@ export function About() {
     <div className="App-about">
       <p>
         <i>{gameName}</i> is a fork of{' '}
+        <i><a href="https://tck.mn/speedle">speedle</a></i>{' '} which is a fork of{' '}
         <i><a href="https://hellowordl.net">hello wordl</a></i>{' '}
         by <a href="https://twitter.com/chordbug">Lynn / @chordbug</a>,
         which is a remake of the word game{" "}
@@ -17,23 +18,10 @@ export function About() {
         is allegedly based on the TV show <i>Lingo</i>.
       </p>
       <p>
-        There are many different parameters
+        Normally, there are many different parameters
         for how the game works,
-        which you can change in the settings.
-        The speedrun timer displays a code
-        which describes these parameters.
-        The default is <code>v01-N5x10</code>.
+        which you can change in the settings. I have set this to be hidden and constant for experimental purposes.
       </p>
-      <ul style={{textAlign: 'left'}}>
-        <li><code>v01</code> is the version, which is currently always v01.</li>
-        <li><code>N</code> is the difficulty: N for normal, H for hard, and U for ultra hard.</li>
-        <li><code>5</code> is the word length. The New York Times wordlist is represented here by <code>*</code>, since it only has length-5 words.</li>
-        <li><code>x10</code> is the length of the speedrun (how many wordles you have to solve).</li>
-        <li><code>-a<i>XY</i></code>, if present, indicates which autoguessing features are enabled. The first digit (X) is 1 if you have "automatically press enter" turned on and 0 otherwise, and the second digit (Y) is the number of autoguesses you have.</li>
-        <li><code>-d<i>X</i></code>, if present, indicates the amount of delay time after each guess, measured in 10ths of a second.</li>
-        <li><code>-p<i>X</i></code>, if present, indicates the amount of penalty time added for each wrong guess, measured in 10ths of a second.</li>
-        <li><code>/<i>X</i></code>, if present, indicates that variant X is enabled (B = blind, K = hide keyboard).</li>
-      </ul>
       <hr />
       <p>
         You get {maxGuesses} tries to guess a target word.
@@ -93,8 +81,7 @@ export function About() {
       />
       <p>
         Report issues{" "}
-        <a href="https://github.com/tckmn/speedle/issues">here</a>, or{' '}
-        <a href="https://tck.mn/contact">contact me</a>.
+        by DMing me on Discord.
       </p>
     </div>
   );

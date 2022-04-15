@@ -29,7 +29,7 @@ export function Timer(props: TimerProps) {
   const correct = props.times.filter(t => t.correct);
 
   const diffs = correct
-    .map((t, i) => (t.time - (i ? correct[i-1].time : 0))/1000)
+    .map((t) => (t.time))
     .slice(1).slice(-props.count);
 
   const slowest = Math.max.apply(0, diffs),
@@ -99,8 +99,8 @@ export function Timer2(props: Timer2Props) {
     correct: true
   } : {
     word: t.word,
-    time: (t.time - props.times[i-1].time) / 1000 + t.penalty,
-    bonus: (t.firstKey - props.times[i-1].time) / 1000,
+    time: (t.time) / 1000 + t.penalty,
+    bonus: (t.firstKey) / 1000,
     correct: t.correct
   }).slice(1);
 

@@ -9,7 +9,7 @@ export enum WordList {
   NewYorkTimes = 'nyt',
 }
 
-export const gameName = "speedle";
+export const gameName = "researchdle";
 export const maxGuesses = 6;
 
 

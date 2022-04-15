@@ -56,7 +56,7 @@ function App() {
   const [penalty, setPenalty] = useSetting<number>("penalty", 0);
   const [blind, setBlind] = useSetting<boolean>("blind", false);
   const [nokbd, setNokbd] = useSetting<boolean>("nokbd", false);
-  const [wordlist, setWordlist] = useSetting<string>("wordlist", 'hw');
+  const [wordlist, setWordlist] = useSetting<string>("wordlist", 'nyt');
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -84,7 +84,7 @@ function App() {
     <div className={"App-container" + (colorBlind ? " color-blind" : "")}>
       <div className="topwrap">
         <h1>
-            speedle
+            researchdle
         </h1>
         <div className="top-right">
           {page !== "game" ? (
@@ -135,36 +135,6 @@ function App() {
             <label htmlFor="colorblind-setting">High-contrast colors</label>
           </div>
           <div className="Settings-setting">
-            <input
-              id="difficulty-setting"
-              type="range"
-              min="0"
-              max="2"
-              value={difficulty}
-              onChange={(e) => setDifficulty(+e.target.value)}
-            />
-            <div>
-              <label htmlFor="difficulty-setting">Difficulty:</label>
-              <strong>{["Normal", "Hard", "Ultra Hard"][difficulty]}</strong>
-              <div
-                style={{
-                  fontSize: 14,
-                  height: 40,
-                  marginLeft: 8,
-                  marginTop: 8,
-                }}
-              >
-                {
-                  [
-                    `Guesses must be valid dictionary words.`,
-                    `Wordle's "Hard Mode". Green letters must stay fixed, and yellow letters must be reused.`,
-                    `An even stricter Hard Mode. Yellow letters must move away from where they were clued, and gray clues must be obeyed.`,
-                  ][difficulty]
-                }
-              </div>
-            </div>
-          </div>
-          <div className="Settings-setting">
             <label htmlFor="keyboard-setting">Keyboard layout:</label>
             <select
               name="keyboard-setting"
@@ -187,112 +157,6 @@ function App() {
             />
             <label htmlFor="enter-left-setting">"Enter" on left side</label>
           </div>
-
-          <p className="Settings-label">timer settings</p>
-
-          <div className="Settings-setting">
-            <input
-              id="topbar-setting"
-              type="checkbox"
-              checked={topbar}
-              onChange={() => setTopbar((x: boolean) => !x)}
-            />
-            <label htmlFor="topbar-setting">Old speedrun timer style</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="firstkey-setting"
-              type="checkbox"
-              checked={firstKeyTiming}
-              onChange={() => setFirstKeyTiming((x: boolean) => !x)}
-            />
-            <label htmlFor="firstkey-setting">Show extra data</label>
-          </div>
-
-          <p className="Settings-label">speedrun settings</p>
-
-          <div className="Settings-setting">
-            <input
-              id="runlen-setting"
-              type="number"
-              value={runlen}
-              onChange={(e) => setRunlen(parseInt(e.target.value) || 10)}
-            />
-            <label htmlFor="runlen-setting">Run length</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="delay-setting"
-              type="number"
-              value={delay}
-              step="0.1"
-              onChange={(e) => setDelay(Math.round(parseFloat(e.target.value)*10)/10)}
-            />
-            <label htmlFor="delay-setting">Guess delay (seconds)</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="penalty-setting"
-              type="number"
-              value={penalty}
-              step="0.1"
-              onChange={(e) => setPenalty(Math.round(parseFloat(e.target.value)*10)/10)}
-            />
-            <label htmlFor="penalty-setting">Guess penalty (seconds)</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="autoenter-setting"
-              type="checkbox"
-              checked={autoenter}
-              onChange={() => setAutoenter((x: boolean) => !x)}
-            />
-            <label htmlFor="autoenter-setting">Automatically press Enter</label>
-          </div>
-          <div className="Settings-setting" style={{flexDirection: 'column'}}>
-            <label htmlFor="autoguess-setting">Automatically guess at start of game:</label>
-            <textarea
-              name="autoguess-setting"
-              id="autoguess-setting"
-              value={autoguess}
-              onChange={(e) => setAutoguess(e.target.value)}
-            >
-            </textarea>
-          </div>
-
-          <p className="Settings-label">variant settings</p>
-
-          <div className="Settings-setting">
-            <input
-              id="blind-setting"
-              type="checkbox"
-              checked={blind}
-              onChange={() => setBlind((x: boolean) => !x)}
-            />
-            <label htmlFor="blind-setting">Blind mode</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="nokbd-setting"
-              type="checkbox"
-              checked={nokbd}
-              onChange={() => setNokbd((x: boolean) => !x)}
-            />
-            <label htmlFor="nokbd-setting">Hide keyboard</label>
-          </div>
-          <div className="Settings-setting">
-            <label htmlFor="wordlist-setting">Wordlist:</label>
-            <select
-              name="wordlist-setting"
-              id="wordlist-setting"
-              value={wordlist}
-              onChange={(e) => setWordlist(e.target.value)}
-            >
-              <option value="hw">hello wordl</option>
-              <option value="nyt">New York Times</option>
-            </select>
-          </div>
-
         </div>
       )}
       <Game
