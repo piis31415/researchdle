@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/researchdle/static/css/main.788a9a32.css",
-    "main.js": "/researchdle/static/js/main.05c41a8e.js",
+    "main.js": "/researchdle/static/js/main.aac152b1.js",
     "index.html": "/researchdle/index.html",
     "main.788a9a32.css.map": "/researchdle/static/css/main.788a9a32.css.map",
-    "main.05c41a8e.js.map": "/researchdle/static/js/main.05c41a8e.js.map"
+    "main.aac152b1.js.map": "/researchdle/static/js/main.aac152b1.js.map"
   },
   "entrypoints": [
     "static/css/main.788a9a32.css",
-    "static/js/main.05c41a8e.js"
+    "static/js/main.aac152b1.js"
   ]
 }
