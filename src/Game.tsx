@@ -422,11 +422,6 @@ function Game(props: GameProps) {
         >
           <tbody>{tableRows}</tbody>
         </table>
-        {!props.topbar && <div
-          className="Game-new-sidebar"
-        >
-          <Timer2 count={props.runlen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} />
-        </div>}
       </div>
       <p
         role="alert"
