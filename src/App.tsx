@@ -56,7 +56,7 @@ function App() {
   const [penalty, setPenalty] = useSetting<number>("penalty", 0);
   const [blind, setBlind] = useSetting<boolean>("blind", false);
   const [nokbd, setNokbd] = useSetting<boolean>("nokbd", false);
-  const [wordlist, setWordlist] = useSetting<string>("wordlist", 'nyt');
+  const [wordlist, setWordlist] = useSetting<string>("wordlist", 'hw');
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";

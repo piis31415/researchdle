@@ -1,6 +1,10 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-04-15</strong></p>
+      <ul>
+        <li>Why are you here smh</li>
+      </ul>
       <p><strong>2022-04-12</strong></p>
       <ul>
         <li>Wordlist selection: there is now an option for the New York Times wordlist.</li>

@@ -87,6 +87,7 @@ function parseUrlGameNumber(): number {
 }
 
 function Game(props: GameProps) {
+  const [count, setCount] = useState<string>(window.localStorage.getItem("count") || "1");
   const [gameState, setGameState] = useState(GameState.Playing);
   const [guesses, setGuesses] = useState<string[]>([]);
   const [starttime, setStarttime] = useState<number>(+new Date());
@@ -140,6 +141,7 @@ function Game(props: GameProps) {
     setTarget(Dictionary.randomTarget(props.wordlist, newWordLength));
     setHint("");
     setGuesses([]);
+    setCount((parseInt(count)+1).toString());
     setStarttime(+new Date());
     setCurrentGuess("");
     setGameState(GameState.Playing);
@@ -169,11 +171,11 @@ function Game(props: GameProps) {
 
   useEffect(doAutoguess, []);
 
-  async function share(copiedHint: string, text?: string) {
+  async function share(text?: string) {
     const url = seed
       ? window.location.origin + window.location.pathname + currentSeedParams()
       : getChallengeUrl(target);
-    const body = url + (text ? "\n\n" + text : "");
+    const body = (text ? text : "");
     if (
       /android|iphone|ipad|ipod|webos/i.test(navigator.userAgent) &&
       !/firefox/i.test(navigator.userAgent)
@@ -187,7 +189,6 @@ function Game(props: GameProps) {
     }
     try {
       await navigator.clipboard.writeText(body);
-      setHint(copiedHint);
       return;
     } catch (e) {
       console.warn("navigator.clipboard.writeText failed:", e);
@@ -200,6 +201,7 @@ function Game(props: GameProps) {
   const onKey = (key: string) => {
     if (gameState === GameState.Won || gameState === GameState.Lost) {
       if (key === "Enter") {
+        setHint("Press Enter to begin the next Wordle");
         setGameState(GameState.Copied);
       }
       return;
@@ -256,6 +258,26 @@ function Game(props: GameProps) {
       (variants ?
        `/${variants}` : '');
 
+
+  const copy = (correct: boolean) => {
+    const emoji = props.colorBlind
+                ? ["⬛", "🟦", "🟧"]
+                : ["⬛", "🟨", "🟩"];
+    const score = correct ? guesses.length : "X";
+    const time = (+new Date() - starttime)/1000;
+    share(
+      `${gameName} ${score}/${props.maxGuesses} ${time}\n` + 
+      `${target}\n` +
+        guesses
+          .map((guess) =>
+            clue(guess, target)
+              .map((c) => emoji[c.clue ?? 0])
+              .join("")
+          )
+          .join("\n")
+    );
+  };
+
   const log = (target: string, correct: boolean) => {
       const time = +new Date(), dur = time - starttime;
       setTimes(times => [...times, {
@@ -268,6 +290,7 @@ function Game(props: GameProps) {
       localStorage.setItem('log_'+mode,
                            (localStorage.getItem('log_'+mode) || '') +
                                ',' + target + ' ' + (correct ? dur : 0));
+      copy(correct);
   };
 
   const submit = (guess: string, autoing: boolean = false) => {
@@ -316,9 +339,7 @@ function Game(props: GameProps) {
     setCurrentGuess((guess) => "");
 
     const gameOver = (verbed: string) =>
-      `You ${verbed}! The answer was ${target.toUpperCase()}. (Enter to ${
-        challenge ? "play a random game" : "play again"
-      })`;
+      `You ${verbed}! The answer was ${target.toUpperCase()}. The results have been copied to the clipboard; please paste them in the Google form below. (Enter to proceed)`;
 
     if (autoing) {
       // nop (TODO what if it's right lmao)
@@ -392,18 +413,6 @@ function Game(props: GameProps) {
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
       {props.topbar && <Timer count={props.runlen} times={times} />}
-      <div className="Game-options">
-        <label htmlFor="wordLength">Letters:</label>
-        <input
-          type="range"
-          min={minLength}
-          max={maxLength}
-          id="wordLength"
-          disabled={inGame}
-          value={wordLength}
-          onChange={(e) => newWithLength((_: number) => Number(e.target.value))}
-        ></input>
-      </div>
       <div className="Game-main">
         <table
           className="Game-rows"
@@ -434,14 +443,15 @@ function Game(props: GameProps) {
         onKey={onKey}
       />}
       <div className="Game-seed-info">
-        {props.chlink}.
+        <a target="_blank" href="https://forms.gle/FvEXU1nNBh8gtRTB7">Google Form!</a>
+        {" "}
         forked from
         {" "}
-        <a href="https://hellowordl.net">hello wordl</a>
+        <a target="_blank" href="https://hellowordl.net">hello wordl</a>
         {" "}
         by
         {" "}
-        <a href="https://twitter.com/chordbug">Lynn / @chordbug</a>
+        <a target="_blank" href="https://twitter.com/chordbug">Lynn / @chordbug</a>
       </div>
       {/*<p>
         <button
